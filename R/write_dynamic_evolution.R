@@ -1,9 +1,9 @@
 write.dynamic_evolution=function(fun_header)
 {
-
+  # TODO: Finish updating the logic for R version dynamic evolution
   Head<-'\n\ndynamic_evolution.f=function(BN, time.steps,
-                                  Knockouts="",Over_expr="",Over_expr_AA="",
-                                  KO_times=NULL,OE_times=NULL,
+                                  Knockouts="",Over_expr="",Over_expr_AA="",Mutations="",
+                                  KO_times=NULL,OE_times=NULL,MUT_times=NULL,
                                   asynchronous=TRUE)
 {
   Polym=BN$Polymorphism
@@ -61,6 +61,7 @@ write.dynamic_evolution=function(fun_header)
   Pie_dyn<-"\n\t\t\tupdate.m[node_j,i]=1 \n \t\t} \n\t}\n\treturn(pattern.m) \n}"
   All<-c(Head,fun_header,Pie_dyn)
   write(All,"dynamic_evolution.R",append=TRUE)
-
+  
 }
-
+  
+  

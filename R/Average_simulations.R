@@ -11,8 +11,10 @@
 # dynamic_evolution.f<-function(BN, time.steps,Knockouts="",  
 #                               Over_expr="", 
 #                               Over_expr_AA="",
+#                               Mutations="",
 #                               KO_times=NULL,
 #                               OE_times=NULL,
+#                               MUT_times=NULL,
 #                               asynchronous=TRUE){
 #   stop('Use read.Boolean.functions first to load your Boolean network')
 # }
@@ -32,10 +34,10 @@ Average_simulations.f=function(BN,time.steps,
 {
   
   pattern_i<-replicate(repetitions,dynamic_evolution.f(BN, time.steps,Knockouts,Over_expr,
-                                                    Over_expr_AA,Mutations,KO_times,OE_times,MUT_times,
-                                                    asynchronous), simplify=FALSE)
+                                                       Over_expr_AA,Mutations,KO_times,OE_times,MUT_times,
+                                                       asynchronous), simplify=FALSE)
   pattern_final<-Reduce('+', pattern_i)
-
+  
   return(pattern_final/repetitions)  
 }
 

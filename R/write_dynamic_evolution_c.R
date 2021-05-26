@@ -4,8 +4,8 @@ write.dynamic_evolution_c=function(arguments,modulator){
   t <- textConnection("dynamicevolution", encoding = "UTF-8", open = "w", local = TRUE)
   
   cat(file = t,'dynamic_evolution.f=function(BN, time.steps,
-                                    Knockouts="",Over_expr="",Over_expr_AA="",
-                                    KO_times=NULL,OE_times=NULL,
+                                    Knockouts="",Over_expr="",Over_expr_AA="",Mutations="",
+                                    KO_times=NULL,OE_times=NULL,MUT_times=NULL,
                                     asynchronous=TRUE){\n\n')
   
   cat(file = t,"\tPolym=as.list(BN$Polymorphism)\n\n")
@@ -13,6 +13,7 @@ write.dynamic_evolution_c=function(arguments,modulator){
   cat(file = t,'\tif(!all(Knockouts %in% BN$nodes.names) & all(Knockouts!="")) stop("Nodes in Knockouts argument are not part of the network")\n')
   cat(file = t,'\tif(!all(Over_expr %in% BN$nodes.names) & all(Over_expr!="")) stop("Nodes in Over_expr argument are not part of the network")\n')
   cat(file = t,'\tif(!all(Over_expr_AA %in% BN$nodes.names) & all(Over_expr_AA!="")) stop("Nodes in Over_expr_AA argument are not part of the network")\n\n')
+  cat(file = t,'\tif(!all(Mutations %in% BN$nodes.names) & all(Mutations!="")) stop("Nodes in Mutations argument are not part of the network")\n')
   cat(file = t, "\tif(any(BN$Initial_conditions %in% Knockouts)){\n")
   cat(file = t,"\t\tBN$Initial_conditions<-BN$Initial_conditions[-which(BN$Initial_conditions %in% Knockouts)]\n")
   cat(file = t,"\t}\n")
@@ -35,6 +36,16 @@ write.dynamic_evolution_c=function(arguments,modulator){
   cat(file = t,'\t\t\treturn(0)\n')
   cat(file = t,'\t\t}\n')
   cat(file = t,'\t\tOE_times=lapply(OE_times,function(i){i-1})\n')
+  cat(file = t,'\t}\n\n')
+  cat(file = t,'\tif(!is.null(MUT_times)){\n')
+  cat(file = t,'\t\tif(!is.list(MUT_times))MUT_times=list(MUT_times)\n')
+  cat(file = t,'\t\tif(length(Mutations)!=length(MUT_times) & length(MUT_times)==1){\n')
+  cat(file = t,'\t\t\tMUT_times=rep(MUT_times,length(Mutations))\n')
+  cat(file = t,'\t\t}else if(length(Mutations)!=length(MUT_times) & length(MUT_times)!=1){\n')
+  cat(file = t,'\t\t\tstop("Mutations and MUT_times arguments must be the same length")\n')
+  cat(file = t,'\t\t\treturn(0)\n')
+  cat(file = t,'\t\t}\n')
+  cat(file = t,'\t\tMUT_times=lapply(MUT_times,function(i){i-1})\n')
   cat(file = t,'\t}\n\n')
   cat(file=t,"\tBN$Initial_conditions<-c(BN$Initial_conditions,Over_expr)\n")
   cat(file = t,"\tInitial_cond <- which(BN$nodes.names %in% BN$Initial_conditions)-1\n")

@@ -29,8 +29,8 @@ NumericVector time_evolution_f(const int& ts",
   Polymorphism<-c()
   for(i in nodes.names)
     Polymorphism<-c(Polymorphism,paste("\tdouble P_",i,'=as<double>(Polym["',i,'"]);',sep="") ) 
-
-dyn2<-"\n  
+  
+  dyn2<-"\n  
   //Iterate:
   for (int j = 1; j <= ts; j++) {
     samples = myrandom(n_nodes);
