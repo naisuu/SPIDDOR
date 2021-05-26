@@ -23,14 +23,17 @@ Average_simulations.f=function(BN,time.steps,
                                Knockouts="",  
                                Over_expr="", 
                                Over_expr_AA="",
+                               Mutations="",
                                KO_times=NULL,
                                OE_times=NULL,
+                               MUT_times=NULL,
                                asynchronous=TRUE,
                                repetitions)
 {
   
   pattern_i<-replicate(repetitions,dynamic_evolution.f(BN, time.steps,Knockouts,Over_expr,
-                                                    Over_expr_AA,KO_times,OE_times,asynchronous), simplify=FALSE)
+                                                    Over_expr_AA,Mutations,KO_times,OE_times,MUT_times,
+                                                    asynchronous), simplify=FALSE)
   pattern_final<-Reduce('+', pattern_i)
 
   return(pattern_final/repetitions)  
