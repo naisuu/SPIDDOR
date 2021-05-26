@@ -18,7 +18,7 @@ NumericVector time_evolution_f(const int& ts",
   dyn1<-"
   const int n_nodes = sizeof(nodes_names) / sizeof(nodes_names[0]);
   // Polymorphism constant when applying polymorphism for specific time steps only
-  const float poly_val = 0.1;
+  const float polym_val = 0.1;
   //Pattern and update creation:
   int *pattern = new int[n_nodes*(ts + 1)]();
   int *update =new int[n_nodes*(ts + 1)]();
