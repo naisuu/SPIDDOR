@@ -64,8 +64,8 @@ write.dynamic_evolution_c=function(arguments,modulator){
       arg<-paste(arg,'BN$Modulator["',i,'"],',sep="")
     }
   #} 
-  cat(file = t,'\t P=time_evolution_f(time.steps,',arg,'Knockouts, Over_expr,Over_expr_AA,
-                                    KO_times,OE_times,Polym,Initial_cond,asynchronous)\n\n',sep="") 
+  cat(file = t,'\t P=time_evolution_f(time.steps,',arg,'Knockouts, Over_expr,Over_expr_AA,Mutations,
+                                    KO_times,OE_times,MUT_times,Polym,Initial_cond,asynchronous)\n\n',sep="") 
   cat(file = t,'\tpattern.m=matrix(P,ncol=time.steps+1,nrow=length(BN$nodes.names),byrow=TRUE)\n')
   cat(file = t,'\tcolnames(pattern.m)=seq(1:dim(pattern.m)[2])\n')
   cat(file = t,'\trownames(pattern.m)=BN$nodes.names\n')
