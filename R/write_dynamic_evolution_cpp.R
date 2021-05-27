@@ -18,7 +18,7 @@ NumericVector time_evolution_f(const int& ts",
   dyn1<-"
   const int n_nodes = sizeof(nodes_names) / sizeof(nodes_names[0]);
   // Polymorphism constant when applying polymorphism for specific time steps only
-  const float polym_val = 0.1;
+  const float polym_val = 0.1; // TODO: Should I make this user input? Eventually can also be applied with different values for different nodes, e.g. Mutations=c("A", "B"), Vals=c(0.1, 0.5)
   //Pattern and update creation:
   int *pattern = new int[n_nodes*(ts + 1)]();
   int *update =new int[n_nodes*(ts + 1)]();
@@ -29,6 +29,10 @@ NumericVector time_evolution_f(const int& ts",
   Polymorphism<-c()
   for(i in nodes.names)
     Polymorphism<-c(Polymorphism,paste("\tdouble P_",i,'=as<double>(Polym["',i,'"]);',sep="") ) 
+  
+  Polyms_to_update <-c()
+  for(i in nodes.names)
+    Polyms_to_update <-c(Polyms_to_update, paste("\tP_",i,'=as<double>(Polym["',i,'"]);',sep=""))
   
   dyn2<-"\n  
   //Iterate:
@@ -51,7 +55,6 @@ NumericVector time_evolution_f(const int& ts",
         // This is kind of redundant as this feature already existed, however this can serve as syntax sugar
         if (MUT_times.size() == 0) {
           Polym[node_i] = polym_val; // Set the polymorphism of that node to our preset polymorphism constant
-          continue;
         } else {
           // if a time step range is given, only set the polymorphism constant for those time steps.
           int pos = std::find(Mutations.begin(), Mutations.end(), node_i) - Mutations.begin();
@@ -61,7 +64,7 @@ NumericVector time_evolution_f(const int& ts",
             Polym[node_i] = polym_val;
           } else {
             // Once the specified time steps have been completed, set the polymorphism back to default (1)
-            Polym[node_i] = 1;
+            Polym[node_i] = 1; // TODO: Allow users to combine this with preset polymorphism, i.e. store original initial conditions separately.
           }
         }
       }
@@ -111,7 +114,7 @@ NumericVector time_evolution_f(const int& ts",
   delete[] pattern;
   return(P);
 }"
-  All<-c(Head,nodes,dyn1,Polymorphism,dyn2,fun_header,Pie_dyn)
+  All<-c(Head,nodes,dyn1,Polymorphism,dyn2,Polyms_to_update,fun_header,Pie_dyn)
   write(All,"Boolean_func_C.cpp",append=TRUE)
 }
 
